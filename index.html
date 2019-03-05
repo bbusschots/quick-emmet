@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8" />
+				
+	<!-- Include Bootstrap 4 CSS -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	
+	<!-- Include Highlight JS CSS -->
+	<link rel="stylesheet"
+		href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/styles/default.min.css">
+		
+	<title>Quick Emmet</title>
+</head>
+<body>
+
+<!-- The main page body -->
+<main class="container-fluid">
+	<form class="form" action="javascript:void(0);">
+		<div class="row">
+			<div class="col-12">
+			
+				<!-- The form for generating Toasts -->
+				<fieldset class="container">
+					<legend>Quick Emmet Expander</legend>
+					
+					<div class="form-group">
+						<label for="emmet_in_tb">Emmet Abbreviation</label>
+						<input type="text" id="emmet_in_tb" name="emmet_in_tb" class="form-control" placeholder="Emmet abbreviation to expand" value="#page>div.logo+ul#navigation>li*5>a{Item $}">
+					</div>
+					<div class="form-group">
+						<pre><code id="emmet_out" class="html"></code></pre>
+					</div>
+					<div class="form-group">
+						<button type="button" id="emmet_expand_btn" class="btn btn-primary form-control">Expand Abbreviation</button>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</form>
+</main>
+
+<!-- Include Bootstrap JavaScript from CDNs -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<!-- Include Emmet from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@emmetio/expand-abbreviation@0.7.3/dist/expand-full.js" integrity="sha256-SGh9w2tRSryNe4rC1gXUZtP8q622ckMZpjjIhFIpk/M=" crossorigin="anonymous"></script>
+
+<!-- Include Highlighgt JS from CDN -->
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/highlight.min.js"></script>
+
+<!-- Our custom JavaScript -->
+<script type="text/javascript">
+	// the document ready handler
+	$(function(){
+		// add a click handler to the expand button
+		$('#emmet_expand_btn').click(function(){
+			$('#emmet_out').text(emmet.expand($('#emmet_in_tb').val()));
+			hljs.highlightBlock($('#emmet_out').get(0));
+		});
+	});
+</script>
+</body>
+</html>
