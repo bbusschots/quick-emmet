@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<!-- Include Bootstrap 4 CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	
+	<!-- Include Highlight JS CSS -->
+	<link rel="stylesheet"
+		href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/styles/default.min.css">
+		
+	<title>Quick Emmet</title>
+</head>
+<body>
+
+<!-- The main page body -->
+<main class="container-fluid">
+	<form class="form" action="javascript:void(0);">
+		<div class="row">
+			<div class="col-12">
+			
+				<!-- The form for expanding the abbreviations -->
+				<fieldset class="container">
+					<legend>Quick Emmet Expander</legend>
+					
+					<!-- The default syntax -->
+					<input type="hidden" id="emmet_syntax_hdn" value="html">
+					
+					<div class="form-group">
+						<div class="input-group">
+							<input type="text" id="emmet_in_tb" name="emmet_in_tb" class="form-control" placeholder="Emmet abbreviation to expand" value="#page>div.logo+ul#navigation>li*5>a{Item $}">
+							<div class="input-group-append">
+								<button type="button" class="btn btn-primary" id="emmet_expand_btn">Expand</button>
+								<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<div class="dropdown-menu">
+									<button class="dropdown-item set_emmet_syntax_btn" type="button" data-syntax="html" id="emmet_syntax_default_btn">Set to HTML</button>
+									<button class="dropdown-item set_emmet_syntax_btn" type="button" data-syntax="css">Set to CSS</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<pre><code id="emmet_out" class="html"></code></pre>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</form>
+</main>
+
+<!-- Include Bootstrap JavaScript from CDNs -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<!-- Include Emmet from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@emmetio/expand-abbreviation@0.7.3/dist/expand-full.js" integrity="sha256-SGh9w2tRSryNe4rC1gXUZtP8q622ckMZpjjIhFIpk/M=" crossorigin="anonymous"></script>
+
+<!-- Include Highlighgt JS from CDN -->
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/highlight.min.js"></script>
+
+<!-- Our custom JavaScript -->
+<script type="text/javascript">
+	// the document ready handler
+	$(function(){
+		// get a reference to the output region
+		const $output = $('#emmet_out');
+		const $syntax = $('#emmet_syntax_hdn');
+		const $expandBtn = $('#emmet_expand_btn');
+		
+		// add a click handler to the expand button
+		$expandBtn.click(function(){
+			// get the details needed to do the expansion
+			const emmetAbbr = $('#emmet_in_tb').val();
+			const emmetSyntax = $syntax.val();
+			
+			// do the expansion
+			const emmetExpansion = emmet.expand(emmetAbbr, { syntax: emmetSyntax });
+			
+			// write the expansion to the output area
+			$output.text(emmetExpansion);
+			
+			// syntax highlight the output area
+			$output.removeClass();
+			$output.addClass(emmetSyntax);
+			hljs.highlightBlock($output.get(0));
+			
+			// select the outputted expansion for easy copying
+			// based on https://html-online.com/articles/select-div-content-text-one-click-javascript/
+			if (document.selection) {
+				// special case for IE
+				const range = document.body.createTextRange();
+				range.moveToElementText($output.get(0));
+				range.select();
+			} else if (window.getSelection) {
+				// non-IE browsers
+				const range = document.createRange();
+				range.selectNode($output.get(0));
+				window.getSelection().addRange(range);
+			}
+		});
+		
+		// add a click handler to the buttons for changing the expansion type
+		$('button.set_emmet_syntax_btn').click(function(){
+			const syntax = $(this).data('syntax');
+			console.log(syntax);
+			$syntax.val(syntax);
+			$expandBtn.text(`Expand ${syntax.toUpperCase()}`);
+		});
+		// set the default syntax
+		$('#emmet_syntax_default_btn').click();
+	});
+</script>
+</body>
+</html>
